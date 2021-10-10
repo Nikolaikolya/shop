@@ -4,8 +4,8 @@
   "scripts": {
     "serve:server": "cd ./server && npm run serve",
     "serve:client": "cd ./client && npm run serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build:server": "cd ./server && npm run build",
+    "build:client": "cd ./client && npm run build"
   },
   "main": "index.js",
   "author": "Inkognito",
