@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "serve": "nodemon server.js",
+    "build": "node server.js"
+  },
   "prisma": {
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^3.2.1",
+    "nodemon": "^2.0.13",
     "prisma": "^3.2.1"
   }
 }
