@@ -2,7 +2,9 @@ const prisma = require('../helpers/prisma');
 const bcrypt = require('bcrypt');
 const generateTokens = require('../helpers/token');
 const Redis = require('../helpers/redis');
-const { REDIS_USERS } = require('../constants/redis');
+const {
+  REDIS_USERS
+} = require('../constants/redis');
 
 const redis = new Redis(REDIS_USERS);
 class Auth {
@@ -48,6 +50,39 @@ class Auth {
     } else res.status(400).json({
       success: false,
       message: "Такой пользователь уже есть!"
+    });
+  }
+
+  async login(req, res) {
+    const {
+      email,
+      password
+    } = req.body
+
+    const user = await prisma.users.findUnique({
+      where: {
+        email,
+      }
+    })
+
+    if (!user) res.status(400).json({
+      success: false,
+      message: "Такой пользователь не найден!"
+    });
+
+    const hashResult = await bcrypt.compare(password, user.password_hash);
+
+    if (!hashResult) res.status(400).json({
+      success: false,
+      message: "Неверный пароль."
+    });
+
+    const tokens = await generateTokens(user.id, user.role);
+
+    res.status(200).json({
+      success: true,
+      tokens,
+      user
     });
   }
 }

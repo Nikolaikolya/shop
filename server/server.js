@@ -10,6 +10,8 @@ const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 // Import routes
 const auth = require('./routes/auth');
@@ -36,6 +38,9 @@ app.use(fileUpload());
 // Routes
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
+
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => res.status(200).json({ success: true }))
 
