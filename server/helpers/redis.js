@@ -8,7 +8,7 @@ class Redis {
   }
 
   async hget(key) {
-    return await redis.hget(this.name_column_redis, key);
+    return JSON.parse(await redis.hget(this.name_column_redis, key));
   }
 
   async hset(key, value) {

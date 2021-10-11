@@ -13,6 +13,7 @@ const morgan = require('morgan');
 
 // Import routes
 const auth = require('./routes/auth');
+const users = require('./routes/users');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/users', users);
 
 
 app.listen(PORT, () => console.log(`Server started from: http://localhost:${PORT}`))
