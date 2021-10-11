@@ -13,7 +13,7 @@ const authMeddleware = async function (req, res, next) {
       };
 
       next();
-    }
+    } else res.status(401).json({ success: false, message: "Ошибка в маршруте!" });
   } catch (error) {
 
     if(error instanceof jwt.TokenExpiredError) {
