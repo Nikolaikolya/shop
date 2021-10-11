@@ -1,6 +1,12 @@
 {
   "name": "my_new_shop",
   "version": "1.0.0",
+  "scripts": {
+    "serve:server": "cd ./server && npm run serve",
+    "serve:client": "cd ./client && npm run serve",
+    "build:server": "cd ./server && npm run build",
+    "build:client": "cd ./client && npm run build"
+  },
   "main": "index.js",
   "author": "Inkognito",
   "license": "MIT"
