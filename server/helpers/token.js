@@ -5,14 +5,14 @@ const { REDIS_REFRESH_TOKEN } = require('../constants/redis')
 
 const redisRefreshToken = new Redis(REDIS_REFRESH_TOKEN)
 
-const generateTokens = async (id, role) => {
+const generateTokens = async (id, role, expire = "20000000s") => {
   const payload = {
     id,
     role
   };
 
   const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "20000000s"
+    expiresIn: expire
   });
 
   const refresh_token = jwt.sign(payload, process.env.JWT_SECRET, {
