@@ -12,7 +12,7 @@ class Redis {
   }
 
   async hset(key, value) {
-    return await redis.hset(this.name_column_redis, key, value);
+    return await redis.hset(this.name_column_redis, key, JSON.stringify(value));
   }
 
   async get(key) {
