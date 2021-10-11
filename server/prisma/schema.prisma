@@ -11,7 +11,7 @@ model attribute_name {
   id             Int        @id
   attribute_id   Int
   attribute_name String     @db.VarChar(50)
-  attributes     attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade, map: "fk_attribute_id")
+  attributes     attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade)
 }
 
 model attributes {
@@ -31,8 +31,8 @@ model cart_products {
   id         Int      @id
   cart_id    Int
   product_id Int
-  cart       cart     @relation(fields: [cart_id], references: [id], onDelete: Cascade, map: "product_cart_id")
-  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "to_product_id")
+  cart       cart     @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model categories {
@@ -40,7 +40,7 @@ model categories {
   name               String               @db.VarChar(100)
   description        String?
   image_id           Int?
-  images             images?              @relation(fields: [image_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "category_image_id")
+  images             images?              @relation(fields: [image_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   product_categories product_categories[]
 }
 
@@ -61,8 +61,8 @@ model order_details {
   unit_price Float     @db.Real
   quantity   Int       @default(0) @db.SmallInt
   discount   Float?    @db.Real
-  orders     orders?   @relation(fields: [order_id], references: [id], onDelete: Cascade, map: "details_order_id")
-  products   products? @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "details_product_id")
+  orders     orders?   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  products   products? @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model orders {
@@ -81,16 +81,16 @@ model product_attributes {
   id           Int        @id
   product_id   Int
   attribute_id Int
-  attributes   attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade, map: "fk_attribute_id")
-  products     products   @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_product_id")
+  attributes   attributes @relation(fields: [attribute_id], references: [id], onDelete: Cascade)
+  products     products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model product_categories {
   id          Int        @id
   product_id  Int
   category_id Int
-  categories  categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category_id")
-  products    products   @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_id")
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  products    products   @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model product_comments {
@@ -98,8 +98,8 @@ model product_comments {
   text       String
   product_id Int
   user_id    Int
-  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_product_id")
-  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_user_id")
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model product_defects {
@@ -108,9 +108,9 @@ model product_defects {
   product_id  Int
   supply_id   Int
   supplier_id Int
-  products    products  @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_product_id")
-  suppliers   suppliers @relation(fields: [supplier_id], references: [id], onDelete: Cascade, map: "fk_supplier_id")
-  supply      supply    @relation(fields: [supply_id], references: [id], onDelete: Cascade, map: "fk_supply_id")
+  products    products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  suppliers   suppliers @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  supply      supply    @relation(fields: [supply_id], references: [id], onDelete: Cascade)
 }
 
 model products {
@@ -137,8 +137,8 @@ model ratings {
   id         Int      @id
   product_id Int
   user_id    Int
-  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_product_id")
-  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_user_id")
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model roles {
@@ -164,30 +164,30 @@ model supply {
   product_count   Int               @db.SmallInt
   product_price   Float             @db.Real
   supply_date     DateTime          @default(now()) @db.Timestamp(6)
-  products        products          @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "fk_product_id")
-  suppliers       suppliers         @relation(fields: [supplier_id], references: [id], onDelete: Cascade, map: "fk_supplier_id")
+  products        products          @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  suppliers       suppliers         @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
   product_defects product_defects[]
 }
 
 model users {
-  id                   Int                @id
-  name                 String             @db.VarChar(100)
-  phone                String             @db.VarChar(15)
-  email                String             @unique @db.VarChar(30)
-  password_hash        String
-  city                 String?            @db.VarChar(100)
-  adress               String?            @db.VarChar(255)
-  created_at           DateTime?          @default(now()) @db.Timestamp(6)
-  updated_at           DateTime?          @db.Timestamp(6)
-  reset_password_token String?
-  cart_id              Int?
-  avatar               Int?
-  role_id              Int                @default(0)
-  images               images?            @relation(fields: [avatar], references: [id], onDelete: Cascade, map: "user_image_id")
-  cart                 cart?              @relation(fields: [cart_id], references: [id], onDelete: Cascade, map: "user_cart_id")
-  roles                roles              @relation(fields: [role_id], references: [id], onDelete: Cascade, map: "user_role_id")
-  product_comments     product_comments[]
-  ratings              ratings[]
+  id                    Int                @id @default(autoincrement())
+  name                  String             @db.VarChar(100)
+  phone                 String             @db.VarChar(15)
+  email                 String             @unique @db.VarChar(30)
+  password_hash         String
+  city                  String?            @db.VarChar(100)
+  adress                String?            @db.VarChar(255)
+  created_at            DateTime?          @default(now()) @db.Timestamp(6)
+  reset_password_expire DateTime?          @db.Timestamp(6)
+  reset_password_token  String?
+  cart_id               Int?
+  avatar                Int?
+  role_id               Int                @default(0)
+  images                images?            @relation(fields: [avatar], references: [id], onDelete: Cascade)
+  cart                  cart?              @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+  roles                 roles              @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  product_comments      product_comments[]
+  ratings               ratings[]
 }
 
 model employees {
@@ -202,8 +202,8 @@ model employees {
   notes      String?
   region_id  Int       @default(0) @db.SmallInt
   image_id   Int?
-  images     images?   @relation(fields: [image_id], references: [id], onDelete: Cascade, map: "fk_image_id")
-  region     region    @relation(fields: [region_id], references: [id], onDelete: Cascade, map: "fk_region_id")
+  images     images?   @relation(fields: [image_id], references: [id], onDelete: Cascade)
+  region     region    @relation(fields: [region_id], references: [id], onDelete: Cascade)
 }
 
 model region {
