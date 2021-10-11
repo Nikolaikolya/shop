@@ -1,7 +1,10 @@
 const prisma = require('../helpers/prisma');
 const bcrypt = require('bcrypt');
 const generateTokens = require('../helpers/token');
+const Redis = require('../helpers/redis');
+const { REDIS_USERS } = require('../constants/redis');
 
+const redis = new Redis(REDIS_USERS);
 class Auth {
   async register(req, res) {
 
@@ -26,22 +29,11 @@ class Auth {
           phone,
           email,
           password_hash,
-        },
-        select: {
-          id: true,
-          name: true,
-          phone: true,
-          email: true,
-          city: true,
-          adress: true,
-          created_at: true,
-          cart_id: true,
-          avatar: true,
-          role_id: false
         }
       })
 
       if (newUser) {
+        await redis.hset(newUser.id, newUser);
         const tokens = await generateTokens(newUser.id, newUser.rore_id, "15m");
         tokens.refresh_token = "";
 

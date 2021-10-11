@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "serve": "nodemon server.js",
+    "dev": "nodemon cluster.js",
     "build": "node server.js"
   },
   "prisma": {

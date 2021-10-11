@@ -8,11 +8,11 @@ class Redis {
   }
 
   async hget(key) {
-    return await redis.hget(this.name_column_redis, key);
+    return JSON.parse(await redis.hget(this.name_column_redis, key));
   }
 
   async hset(key, value) {
-    return await redis.hset(this.name_column_redis, key, value);
+    return await redis.hset(this.name_column_redis, key, JSON.stringify(value));
   }
 
   async get(key) {
