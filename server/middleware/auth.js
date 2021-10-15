@@ -3,14 +3,11 @@ const jwt = require('jsonwebtoken');
 const authMeddleware = async function (req, res, next) {
   try {
     if (req.headers.authorization) {
-      const token = req.headers.authorization.split(' ');
+      const token = req.headers.authorization.split(' ')[1];
       
-      const decoded = verifyToken(token[1]);
+      const decoded = verifyToken(token);
 
-      req.user = {
-        id: decoded.id,
-        role: decoded.role
-      };
+      req.user = decoded;
 
       next();
     } else res.status(401).json({ success: false, message: "Ошибка в маршруте!" });

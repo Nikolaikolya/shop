@@ -5,6 +5,7 @@ const Redis = require('../helpers/redis');
 const {
   REDIS_USERS
 } = require('../constants/redis');
+const { spreadUser } = require('../helpers/spreadData');
 
 const redis = new Redis(REDIS_USERS);
 class Auth {
@@ -16,6 +17,8 @@ class Auth {
       email,
       password
     } = req.body;
+
+    console.log(req.body);
     const password_hash = await bcrypt.hash(password, 7);
 
     const user = await prisma.users.findUnique({
@@ -36,7 +39,7 @@ class Auth {
 
       if (newUser) {
         await redis.hset(newUser.id, newUser);
-        const tokens = await generateTokens(newUser.id, newUser.rore_id, "15m");
+        const tokens = await generateTokens(newUser, "15m");
         tokens.refresh_token = "";
 
         res.status(200).json({
@@ -77,12 +80,12 @@ class Auth {
       message: "Неверный пароль."
     });
 
-    const tokens = await generateTokens(user.id, user.role);
+    const tokens = await generateTokens(user);
 
     res.status(200).json({
       success: true,
       tokens,
-      user
+      user: spreadUser(user)
     });
   }
 }

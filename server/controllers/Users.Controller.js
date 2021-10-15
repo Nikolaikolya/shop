@@ -3,6 +3,7 @@ const Redis = require('../helpers/redis');
 const {
   REDIS_USERS
 } = require('../constants/redis');
+const { spreadUser } = require('../helpers/spreadData');
 
 const redis = new Redis(REDIS_USERS);
 
@@ -10,10 +11,11 @@ class Users {
 
   async getOne(req, res) {
     const id = parseInt(req.params.id);
-    const user = await redis.hget(id);
+    const user = await redis.hget(id);    
+
     if (user) res.status(200).json({
       success: true,
-      user
+      user: spreadUser(user)
     });
     else {
       const user = await prisma.users.findUnique({
@@ -21,9 +23,10 @@ class Users {
           id,
         }
       });
+
       res.status(200).json({
         success: true,
-        user
+        user: spreadUser(user)
       });
     }
   }
