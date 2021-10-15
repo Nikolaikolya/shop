@@ -1,8 +1,9 @@
 const adminMeddleware = function (req, res, next) {
-  if (req.user.role === "ADMIN") {
+  console.log(req.user, 2);
+  if (req.user.role_id === 3) {
     return next();
   }
-  else res.status(404).json({ success: false })
+  else res.status(404).json({ success: false, message: "У Вас нет прав доступа!" })
 }
 
 module.exports = adminMeddleware
