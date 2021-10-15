@@ -1,7 +1,7 @@
 <template>
   <base-modals
     title="Вход на сайт"
-    @close="isOpen = true"
+    @close="$emit('close', false)"
     :isOpen="isOpen"
     :action="login"
   >
@@ -29,11 +29,18 @@
 </template>
 
 <script>
-import { HTTP } from "../../helpers/Request";
 import baseModals from "./base-modals/base-modals.vue";
+import { mapActions } from "vuex";
+import { REQUEST_AUTH } from "@/store/action-types";
 export default {
   components: { baseModals },
   name: "LoginModal",
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       loginData: {},
@@ -41,18 +48,21 @@ export default {
     };
   },
   methods: {
+    ...mapActions({ reqLogin: REQUEST_AUTH }),
     async login() {
-      const dataAuth = await HTTP.post("api/auth", this.loginData);
+      const res = await this.reqLogin(this.loginData);
+      if (res) this.$emit("close", false);
+      // const dataAuth = await HTTP.post("api/auth", this.loginData);
 
-      const { success, tokens, user } = dataAuth.data;
+      // const { success, tokens, user } = dataAuth.data;
 
-      if (success) {
-        localStorage.setItem("access_token", tokens.access_token);
-        localStorage.setItem("refresh_token", tokens.refresh_token);
-        localStorage.setItem("user", JSON.stringify(user));
-      }
+      // if (success) {
+      //   localStorage.setItem("access_token", tokens.access_token);
+      //   localStorage.setItem("refresh_token", tokens.refresh_token);
+      //   localStorage.setItem("user", JSON.stringify(user));
+      // }
 
-      console.log(dataAuth);
+      // console.log(dataAuth);
     },
   },
 };

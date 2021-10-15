@@ -1,12 +1,37 @@
 <template>
   <nav-bar />
   <router-view />
+
+  <p @click="isOpenLogin = true">Test</p>
+  <login-modal @close="isOpenLogin = false" :isOpen="isOpenLogin" />
 </template>
 
 <script>
+import LoginModal from "@/components/modals/login-modal.vue";
 import NavBar from "./components/nav-bar/nav-bar.vue";
+import { ref, provide } from "vue";
+import {
+  SHOW_LOGIN_POPUP,
+  CLOSE_LOGIN_POPUP,
+  SHOW_REGISTER_POPUP,
+  CLOSE_REGISTER_POPUP,
+} from "@/constants/Events";
 export default {
-  components: { NavBar },
+  components: { NavBar, LoginModal },
+  setup() {
+    const isOpenLogin = ref(false);
+    const isOpenRegister = ref(false);
+
+    const updateOpenLogin = (value) => (isOpenLogin.value = value);
+    const updateOpenRegister = (value) => (isOpenRegister.value = value);
+
+    provide(CLOSE_LOGIN_POPUP, updateOpenLogin);
+    provide(SHOW_LOGIN_POPUP, isOpenLogin);
+    provide(SHOW_REGISTER_POPUP, isOpenRegister);
+    provide(CLOSE_REGISTER_POPUP, updateOpenRegister);
+
+    return { isOpenLogin, isOpenRegister };
+  },
 };
 </script>
 

@@ -17,3 +17,11 @@
 
   transition: opacity .15s linear;
 }
+
+.modal-content {
+  min-width: 350px;
+}
+
+.modal-footer {
+  justify-content: space-between;
+}

@@ -29,22 +29,48 @@
           </li>
         </ul>
 
-        <ul class="navbar-nav nav-user">
+        <ul class="navbar-nav nav-user" v-if="!user">
           <li class="nav-item me-3">
-            <button class="btn btn-primary" type="button">Войти</button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              @click="openLoginPopup(true)"
+            >
+              Войти
+            </button>
           </li>
           <li class="nav-item">
             <button class="btn btn-primary" type="button">Регистрация</button>
           </li>
         </ul>
+
+        <ul class="navbar-nav nav-user" v-else>
+          <li class="nav-item">
+            <button class="btn btn-primary" type="button">Профиль</button>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
+  {{ user }}
 </template>
 
 <script>
+import { inject } from "vue";
+import { CLOSE_LOGIN_POPUP } from "@/constants/Events";
+import { mapGetters } from "vuex";
+import { GET_USER } from "@/store/getter-types";
 export default {
   name: "NavBar",
+  setup() {
+    const openLoginPopup = inject(CLOSE_LOGIN_POPUP);
+
+    return { openLoginPopup };
+  },
+
+  computed: {
+    ...mapGetters({ user: GET_USER }),
+  },
 };
 </script>
 

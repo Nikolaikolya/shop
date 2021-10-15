@@ -26,7 +26,7 @@
           >
             Закрыть
           </button>
-          <button type="button" class="btn btn-primary" @click="action">
+          <button type="button" class="btn btn-success" @click="action">
             Применить
           </button>
         </div>
@@ -50,6 +50,9 @@ export default {
     action: {
       type: Function,
     },
+  },
+  setup(props, context) {
+    console.log(props);
   },
 };
 </script>

@@ -1,19 +1,12 @@
-import { createStore } from "vuex";
-
 import actions from "./actions";
 import mutations from "./mutations";
 import getters from "./getters";
 import state from "./state";
+export default {
+  namespaced: true,
 
-// Modules
-import auth from "./auth";
-
-export default createStore({
   state,
-  mutations,
   actions,
+  mutations,
   getters,
-  modules: {
-    auth,
-  },
-});
+};
