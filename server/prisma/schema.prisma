@@ -44,6 +44,20 @@ model categories {
   product_categories product_categories[]
 }
 
+model cities {
+  id          Int     @id
+  name        String
+  postal_code String
+  region_id   Int
+  regions     regions @relation(fields: [region_id], references: [id], onDelete: Cascade)
+}
+
+model regions {
+  id     Int      @id
+  name   String   @db.VarChar(100)
+  cities cities[]
+}
+
 model images {
   id         Int          @id @default(autoincrement())
   name       String       @db.VarChar(255)

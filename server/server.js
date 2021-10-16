@@ -16,6 +16,7 @@ const swaggerDocument = require('./swagger.json');
 // Import routes
 const auth = require('./routes/auth');
 const users = require('./routes/users');
+const loadFile = require('./routes/load');
 
 const app = express();
 
@@ -33,11 +34,12 @@ app.use(express.static('public/category_photos'));
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
-// app.use(morgan('dev'));
+app.use(morgan('dev'));
 
 // Routes
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
+app.use('/api/v1/load', loadFile);
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
