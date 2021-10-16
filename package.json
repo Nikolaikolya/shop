@@ -9,5 +9,8 @@
   },
   "main": "index.js",
   "author": "Inkognito",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "uuidv4": "^6.2.12"
+  }
 }
