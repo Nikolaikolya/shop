@@ -17,6 +17,7 @@ const swaggerDocument = require('./swagger.json');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const loadFile = require('./routes/load');
+const regions = require('./routes/region');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use(morgan('dev'));
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 app.use('/api/v1/load', loadFile);
+app.use('/api/v1/info', regions);
 
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
