@@ -4,10 +4,13 @@
 
   <p @click="isOpenLogin = true">Test</p>
   <login-modal @close="isOpenLogin = false" :isOpen="isOpenLogin" />
+  <rigester-modal @close="isOpenRegister = false" :isOpen="isOpenRegister" />
 </template>
 
 <script>
 import LoginModal from "@/components/modals/login-modal.vue";
+import RigesterModal from "./components/modals/rigester-modal.vue";
+
 import NavBar from "./components/nav-bar/nav-bar.vue";
 import { ref, provide } from "vue";
 import {
@@ -17,7 +20,7 @@ import {
   CLOSE_REGISTER_POPUP,
 } from "@/constants/Events";
 export default {
-  components: { NavBar, LoginModal },
+  components: { NavBar, LoginModal, RigesterModal },
   setup() {
     const isOpenLogin = ref(false);
     const isOpenRegister = ref(false);
