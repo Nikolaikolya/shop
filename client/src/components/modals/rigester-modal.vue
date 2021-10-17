@@ -146,7 +146,7 @@
               </option>
             </select>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="post-code" class="form-label">Индекс</label>
             <input
               type="text"
@@ -155,7 +155,7 @@
               placeholder="000000"
               v-model="state.postal_code"
             />
-          </div>
+          </div> -->
           <div class="mb-3">
             <label for="formFile" class="form-label">Аватар</label>
             <input
@@ -175,7 +175,7 @@
 <script>
 import baseModals from "./base-modals/base-modals.vue";
 import { mapActions } from "vuex";
-import { REQUEST_AUTH } from "@/store/action-types";
+import { REQUEST_REGISTER } from "@/store/action-types";
 import { ref, toRefs, watch, reactive, computed } from "vue";
 import { HTTP } from "@/helpers/Request";
 import useVuelidate from "@vuelidate/core";
@@ -202,25 +202,37 @@ export default {
     };
   },
   methods: {
-    ...mapActions({ reqLogin: REQUEST_AUTH }),
+    ...mapActions({ reqRegister: REQUEST_REGISTER }),
     async register() {
       this.v$.$validate();
+
       if (!this.v$.$error) {
-        console.log(this.state);
+        console.log("no-errors");
+        if (this.state.password === this.state.confirm_password) {
+          console.log("password is correct");
+          if (this.state.city === 0) {
+            const { confirm_password, city, ...newUser } = this.state;
+            const res = await this.reqRegister(newUser);
+
+            if (res) this.$emit("close", false);
+          } else {
+            const { confirm_password, ...newUser } = this.state;
+            console.log(newUser);
+          }
+        }
       }
       // const res = await this.reqLogin(this.loginData);
       // this.$emit("close", false);
     },
   },
   setup(props, context) {
-    console.log(props);
-
     const { isOpen } = toRefs(props);
     const regions = ref([]);
     const cities = ref([]);
     const region = ref(0);
     const state = reactive({
       city: 0,
+      password: null,
     });
     const rules = {
       name: {
@@ -267,7 +279,6 @@ export default {
     watch(isOpen, (isOpen) => {
       if (isOpen) {
         getRegionsList();
-        console.log(context);
       }
     });
 
