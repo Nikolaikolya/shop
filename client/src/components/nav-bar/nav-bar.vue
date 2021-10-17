@@ -40,7 +40,13 @@
             </button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-primary" type="button">Регистрация</button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              @click="openRegisterPopup(true)"
+            >
+              Регистрация
+            </button>
           </li>
         </ul>
 
@@ -57,15 +63,16 @@
 
 <script>
 import { inject } from "vue";
-import { CLOSE_LOGIN_POPUP } from "@/constants/Events";
+import { CLOSE_LOGIN_POPUP, CLOSE_REGISTER_POPUP } from "@/constants/Events";
 import { mapGetters } from "vuex";
 import { GET_USER } from "@/store/getter-types";
 export default {
   name: "NavBar",
   setup() {
     const openLoginPopup = inject(CLOSE_LOGIN_POPUP);
+    const openRegisterPopup = inject(CLOSE_REGISTER_POPUP);
 
-    return { openLoginPopup };
+    return { openLoginPopup, openRegisterPopup };
   },
 
   computed: {

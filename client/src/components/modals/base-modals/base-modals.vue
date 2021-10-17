@@ -50,6 +50,9 @@ export default {
     action: {
       type: Function,
     },
+    class: {
+      type: String,
+    },
   },
   setup(props, context) {
     console.log(props);
