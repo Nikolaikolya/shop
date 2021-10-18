@@ -46,7 +46,7 @@ app.use('/api/v1/info', regions);
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/', (req, res) => res.status(200).json({ success: true }))
+app.get('/', (req, res) => res.status(200).json({ success: true }));
 
 
-app.listen(PORT, () => console.log(`Server started from: http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Server started from: http://localhost:${PORT}`));

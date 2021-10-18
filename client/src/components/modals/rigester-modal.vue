@@ -47,13 +47,15 @@
           </div>
         </div>
         <div class="modal-right">
-          <div class="mb-3">
-            <label for="region" class="form-label">Регион</label>
-            <select class="form-select" v-model="region" id="region">
-              <option selected disabled value="0">Выберите регион</option>
+          <div class="mb-3" v-for="item in modalRightData" :key="item.id">
+            <label :for="item.name" class="form-label">{{ item.label }}</label>
+            <select class="form-select" v-model="region" :id="item.name">
+              <option selected disabled :value="item.selectDefault.value">
+                {{ item.selectDefault.text }}
+              </option>
               <option
                 :value="region.id"
-                v-for="region in regions"
+                v-for="region in getSelectItems(item)"
                 :key="region.id"
               >
                 {{ region.name }}
@@ -106,10 +108,9 @@ import baseModals from "./base-modals/base-modals.vue";
 import { mapActions } from "vuex";
 import { REQUEST_REGISTER } from "@/store/action-types";
 import { ref, toRefs, watch, reactive, computed } from "vue";
-import { HTTP } from "@/helpers/Request";
 import useVuelidate from "@vuelidate/core";
 import { getRegions, getCities } from "@/api/info";
-import { modalLeftData } from "./_data/register-modal-data";
+import { modalLeftData, modalRightData } from "./_data/register-modal-data";
 import {
   required,
   email,
@@ -130,6 +131,7 @@ export default {
   data() {
     return {
       modalLeftData,
+      modalRightData,
       user: null,
     };
   },
@@ -187,6 +189,11 @@ export default {
       },
     };
 
+    const getSelectItems = computed(() => (item) => {
+      if (item.name === "region") return regions.value;
+      if (item.name === "city") return cities.value;
+    });
+
     const v$ = useVuelidate(rules, state);
 
     const getRegionsList = async () => {
@@ -219,6 +226,7 @@ export default {
       setPostalCode,
       state,
       v$,
+      getSelectItems,
     };
   },
 };
