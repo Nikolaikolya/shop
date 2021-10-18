@@ -8,109 +8,38 @@
     <form class="row g-3">
       <div class="modal-register">
         <div class="modal-left">
-          <div class="mb-3">
-            <label for="name" class="form-label form-lable--required"
-              >Имя</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              :class="{ 'form-control--error': v$.name.$error }"
-              id="name"
-              v-model="state.name"
-              placeholder="Nikolai"
-              required
-            />
-            <div
-              class="valid-error"
-              v-for="err in v$.name.$errors"
-              :key="err.$uid"
-            >
-              {{ err.$message }}
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="phone" class="form-label form-lable--required"
-              >Телефон</label
-            >
-            <div class="phone-wrapper">
+          <div class="mb-3" v-for="item in modalLeftData" :key="item.id">
+            <label :for="item.name" class="form-label form-lable--required">{{
+              item.label
+            }}</label>
+
+            <div class="phone-wrapper" v-if="item.name === 'phone'">
               <select class="form-select form-select--code">
                 <option value="+7" selected disabled>+7</option>
               </select>
               <input
                 type="text"
                 class="form-control form-control--phone"
-                :class="{ 'form-control--error': v$.phone.$error }"
+                :class="{ 'form-control--error': v$[item.name].$error }"
                 id="phone"
-                v-model="state.phone"
-                placeholder="8000000000"
+                v-model="state[item.name]"
+                :placeholder="item.placeholder"
               />
             </div>
-            <div
-              class="valid-error"
-              v-for="err in v$.phone.$errors"
-              :key="err.$uid"
-            >
-              {{ err.$message }}
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label form-lable--required"
-              >Емайл</label
-            >
+
             <input
-              type="email"
+              v-else
+              :type="item.type"
               class="form-control"
-              :class="{ 'form-control--error': v$.email.$error }"
-              id="email"
-              v-model="state.email"
-              placeholder="name@example.com"
+              :class="{ 'form-control--error': v$[item.name].$error }"
+              :id="item.name"
+              v-model="state[item.name]"
+              :placeholder="item.placeholder"
+              required
             />
             <div
               class="valid-error"
-              v-for="err in v$.email.$errors"
-              :key="err.$uid"
-            >
-              {{ err.$message }}
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label form-lable--required"
-              >Пароль</label
-            >
-            <input
-              type="password"
-              class="form-control"
-              :class="{ 'form-control--error': v$.password.$error }"
-              id="password"
-              v-model="state.password"
-              placeholder="******"
-            />
-            <div
-              class="valid-error"
-              v-for="err in v$.password.$errors"
-              :key="err.$uid"
-            >
-              {{ err.$message }}
-            </div>
-          </div>
-          <div class="mb-3">
-            <label
-              for="password_confirm"
-              class="form-label form-lable--required"
-              >Повтор пароля</label
-            >
-            <input
-              type="password"
-              class="form-control"
-              :class="{ 'form-control--error': v$.confirm_password.$error }"
-              id="password_confirm"
-              v-model="state.confirm_password"
-              placeholder="******"
-            />
-            <div
-              class="valid-error"
-              v-for="err in v$.confirm_password.$errors"
+              v-for="err in v$[item.name].$errors"
               :key="err.$uid"
             >
               {{ err.$message }}
@@ -179,6 +108,8 @@ import { REQUEST_REGISTER } from "@/store/action-types";
 import { ref, toRefs, watch, reactive, computed } from "vue";
 import { HTTP } from "@/helpers/Request";
 import useVuelidate from "@vuelidate/core";
+import { getRegions, getCities } from "@/api/info";
+import { modalLeftData } from "./_data/register-modal-data";
 import {
   required,
   email,
@@ -198,6 +129,7 @@ export default {
   },
   data() {
     return {
+      modalLeftData,
       user: null,
     };
   },
@@ -207,9 +139,7 @@ export default {
       this.v$.$validate();
 
       if (!this.v$.$error) {
-        console.log("no-errors");
         if (this.state.password === this.state.confirm_password) {
-          console.log("password is correct");
           if (this.state.city === 0) {
             const { confirm_password, city, ...newUser } = this.state;
             const res = await this.reqRegister(newUser);
@@ -221,8 +151,6 @@ export default {
           }
         }
       }
-      // const res = await this.reqLogin(this.loginData);
-      // this.$emit("close", false);
     },
   },
   setup(props, context) {
@@ -262,13 +190,13 @@ export default {
     const v$ = useVuelidate(rules, state);
 
     const getRegionsList = async () => {
-      const { data } = await HTTP.get("/info/regions");
-      if (data.success) regions.value.push(...data.regions);
+      const data = await getRegions();
+      if (data) regions.value.push(...data.regions);
     };
 
     const getCitiesList = async () => {
-      const { data } = await HTTP.get(`/info/city/${region.value}`);
-      if (data.success) cities.value = data.cities;
+      const data = await getCities(region.value);
+      if (data) cities.value = data.cities;
     };
 
     const setPostalCode = () => {
