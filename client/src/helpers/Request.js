@@ -1,22 +1,11 @@
 import axios from "axios";
 
-const user = JSON.parse(localStorage.getItem("user"));
-
-// const auth = () => {
-//   const token = localStorage.getItem("access_token");
-//   console.log(token);
-
-//   return token
-//     ? {
-//         Authorization: `Bearer ${token}`,
-//       }
-//     : {};
-// };
-
 export const HTTP = axios.create({
   baseURL: "http://localhost:5050/api/v1",
   headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
   validateStatus: async function (status) {
+    const user = JSON.parse(localStorage.getItem("user"));
+
     if (status === 401) {
       const newTokens = await axios.post(
         "http://localhost:5010/api/auth/refresh",
@@ -37,3 +26,8 @@ export const HTTP = axios.create({
     return status >= 200 && status < 300; // default
   },
 });
+
+export const returningRequest = (data) => {
+  if (data.success) return data;
+  else return false;
+};

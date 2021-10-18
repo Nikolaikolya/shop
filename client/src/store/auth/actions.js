@@ -1,10 +1,10 @@
-import { HTTP } from "../../helpers/Request";
+import { login, register } from "../../api/auth";
 
 export default {
   async REQUEST_AUTH({ commit }, dataFromUrl) {
     try {
-      const { data } = await HTTP.post("/auth/login", dataFromUrl);
-      if (data.success) {
+      const data = await login(dataFromUrl);
+      if (data) {
         console.log(data);
         const { user, tokens } = data;
         commit("SET_TOKEN", tokens.access_token);
@@ -24,8 +24,8 @@ export default {
 
   async REQUEST_REGISTER({ commit }, dataFromUrl) {
     try {
-      const { data } = await HTTP.post("/auth/register", dataFromUrl);
-      if (data.success) {
+      const data = await register(dataFromUrl);
+      if (data) {
         console.log(data);
         const { user, tokens } = data;
         commit("SET_TOKEN", tokens.access_token);
