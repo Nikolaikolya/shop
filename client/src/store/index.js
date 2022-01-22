@@ -5,15 +5,29 @@ import mutations from "./mutations";
 import getters from "./getters";
 import state from "./state";
 
+import { addErrorHandler } from "../helpers/Request";
+
 // Modules
 import auth from "./auth";
+import alert from "./alert";
 
-export default createStore({
+const store = createStore({
   state,
   mutations,
   actions,
   getters,
   modules: {
     auth,
+    alert,
   },
 });
+
+addErrorHandler((response) => {
+  const { data } = response;
+
+  if (data.success) return response;
+
+  store.dispatch("alert/add", { text: data.message });
+});
+
+export default store;

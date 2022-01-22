@@ -3,6 +3,7 @@
   <router-view />
 
   <p @click="isOpenLogin = true">Test</p>
+  {{ alert }}
   <login-modal @close="isOpenLogin = false" :isOpen="isOpenLogin" />
   <rigester-modal @close="isOpenRegister = false" :isOpen="isOpenRegister" />
 </template>
@@ -13,6 +14,7 @@ import RigesterModal from "./components/modals/rigester-modal.vue";
 
 import NavBar from "./components/nav-bar/nav-bar.vue";
 import { ref, provide } from "vue";
+import { mapGetters } from "vuex";
 import {
   SHOW_LOGIN_POPUP,
   CLOSE_LOGIN_POPUP,
@@ -34,6 +36,9 @@ export default {
     provide(CLOSE_REGISTER_POPUP, updateOpenRegister);
 
     return { isOpenLogin, isOpenRegister };
+  },
+  computed: {
+    ...mapGetters("alert", { alert: "all" }),
   },
 };
 </script>

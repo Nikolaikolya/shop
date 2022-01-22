@@ -31,3 +31,7 @@ export const returningRequest = (data) => {
   if (data.success) return data;
   else return false;
 };
+
+export const addErrorHandler = (fn) => {
+  HTTP.interceptors.response.use(fn);
+};

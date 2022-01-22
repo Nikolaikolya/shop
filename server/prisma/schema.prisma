@@ -190,7 +190,7 @@ model users {
   phone                 String             @db.VarChar(15)
   email                 String             @unique @db.VarChar(30)
   password_hash         String
-  city                  Int
+  city_id               Int                @default(0)
   adress                String?            @db.VarChar(255)
   created_at            DateTime?          @default(now()) @db.Timestamp(6)
   reset_password_expire DateTime?          @db.Timestamp(6)
@@ -201,7 +201,7 @@ model users {
   images                images?            @relation(fields: [avatar], references: [id], onDelete: Cascade)
   cart                  cart?              @relation(fields: [cart_id], references: [id], onDelete: Cascade)
   roles                 roles              @relation(fields: [role_id], references: [id], onDelete: Cascade)
-  cities                cities             @relation(fields: [city], references: [id], onDelete: Cascade)
+  cities                cities             @relation(fields: [city_id], references: [id], onDelete: Cascade)
   product_comments      product_comments[]
   ratings               ratings[]
 }
